@@ -40,6 +40,8 @@ def do_temp(room, room_name):
         print "Failed to get %s temp, don't know what to do" % room_name
         return
     else:
+        # save temperature in redis for 5 mins
+        r.setex("current_temp_"+room_name, 300, temp)
         print room_name, temp
         print "Desired:", room['target_temp']
         if temp > room['target_temp']:

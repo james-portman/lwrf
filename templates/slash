@@ -14,7 +14,7 @@ Action:
 <input type="submit">
 </form>
 
-{{ states }}
+
 
 <a href="/target?room=bedroom&temp=20">bedroom 20</a><br/>
 <a href="/target?room=bedroom&temp=15">bedroom 15</a><br/>
@@ -25,3 +25,13 @@ Action:
 R2D3: living room radiator
 <br/>
 R3D1: bedroom rad
+
+<br/>
+current<br/>
+{{ current_temps }}<br/>
+<br/>
+{{ states }}<br/>
+<br/>
+<br/>
+Targets:<br/>
+{{ targets }}<br/>

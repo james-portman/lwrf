@@ -21,7 +21,7 @@ app = Flask(__name__)
 @app.route('/')
 def route_slash():
     states = all_states()
-    return render_template('slash', states=states)
+    return render_template('slash', states=states, current_temps=current_temps(), targets=targets())
 
 
 @app.route('/state')
@@ -92,6 +92,21 @@ def all_states():
         output[device] = r.get(key)
     return output
 
+def current_temps():
+    output = {}
+    keys = r.keys('current_temp_*')
+    for key in keys:
+        device = key.replace('current_temp_', '')
+        output[device] = r.get(key)
+    return output
+
+def targets():
+    output = {}
+    keys = r.keys('target_temp_*')
+    for key in keys:
+        device = key.replace('target_temp_', '')
+        output[device] = r.get(key)
+    return output
 
 def udp_listen_thread():
     transaction_redis_timeout = 10

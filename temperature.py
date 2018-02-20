@@ -42,6 +42,7 @@ def do_temp(room, room_name):
     else:
         # save temperature in redis for 5 mins
         r.setex("current_temp_"+room_name, 300, temp)
+        result = requests.post('http://sensors.h0.re/rooms/'+room_name, data={'temperature': temp})
         print room_name, temp
         print "Desired:", room['target_temp']
         if temp > room['target_temp']:

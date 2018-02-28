@@ -1,37 +1,83 @@
+<!doctype html>
 <html>
-<form method="get" action="/action">
-Room:
-<input name="room" type="text" placeholder="room" value="2">
-Device:
-<input name="device" type="text" placeholder="device" value="3">
-Action:
-<select name="action">
-  <option value="on">on</option>
-  <option value="off">off</option>
-  <option value="dimmer 50">dimmer 50</option>
-  <option value="dimmer 100">dimmer 100</option>
-</select>
-<input type="submit">
-</form>
+<head lang="en">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+<body>
+
+  <div class="container-fluid">
+
+    <h1 class="bd-title">Heating</h1>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Living room</h5>
+        <!-- <h6 class="card-subtitle mb-2 text-muted">R2D3</h6> -->
+
+<div class="progress">
+	<div class="progress-bar {{ 'bg-danger' if targets['living_room'] >= current_temps['living_room'] else '' }}" role="progressbar" style="width: {{ '100' if current_temps['living_room'] > targets['living_room'] else ( (current_temps['living_room']|float) / (targets['living_room']|float) * 100 ) }}%" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+        <p class="card-text">
+          Currently: {{ current_temps['living_room'] }}<sup>o</sup>C<br>
+          <span class="text-muted">
+            Target: {{ targets['living_room'] }}<sup>o</sup>C
+          </span>
+        </p>
+
+        <a href="/target?room=living_room&temp=15" class="card-link btn btn-primary">Set 15<sup>o</sup>C</a>
+        <a href="/target?room=living_room&temp=21" class="card-link btn btn-danger">Set 21<sup>o</sup>C</a>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Bedroom</h5>
+        <!-- <h6 class="card-subtitle mb-2 text-muted">R3D1</h6> -->
+
+<div class="progress">
+	<div class="progress-bar {{ 'bg-danger' if targets['bedroom'] >= current_temps['bedroom'] else '' }}" role="progressbar" style="width: {{ '100' if current_temps['bedroom'] > targets['bedroom'] else ( (current_temps['bedroom']|float) / (targets['bedroom']|float) * 100 ) }}%" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+        <p class="card-text">
+          Currently: {{ current_temps['bedroom'] }}<sup>o</sup>C<br/>
+          <span class="text-muted">
+            Target: {{ targets['bedroom'] }}<sup>o</sup>C
+          </span>
+        </p>
+
+        <a href="/target?room=bedroom&temp=15" class="card-link btn btn-primary">Set 15<sup>o</sup>C</a>
+        <a href="/target?room=bedroom&temp=21" class="card-link btn btn-danger">Set 21<sup>o</sup>C</a>
+
+      </div>
+    </div>
+
+    <!-- <form method="get" action="/action">
+    Room:
+    <input class="form-control" name="room" type="text" placeholder="room" value="2">
+    Device:
+    <input class="form-control" name="device" type="text" placeholder="device" value="3">
+    Action:
+    <select class="form-control" name="action">
+      <option value="on">on</option>
+      <option value="off">off</option>
+      <option value="dimmer 50">dimmer 50</option>
+      <option value="dimmer 100">dimmer 100</option>
+    </select>
+    <input class="form-control" type="submit">
+    </form> -->
+
+    Timers:<br/>
+    {% for timer in timers %}
+    @{{ timer['time'] }} set {{ timer['room'] }} to {{ timer['target'] }}<br/>
+    {% endfor %}
+
+  </div>
+</body>
+</html>
 
 
-
-<a href="/target?room=bedroom&temp=20">bedroom 20</a><br/>
-<a href="/target?room=bedroom&temp=15">bedroom 15</a><br/>
-<a href="/target?room=living_room&temp=20">living_room 20</a><br/>
-<a href="/target?room=living_room&temp=15">living_room 15</a><br/>
-
-<br/>
-R2D3: living room radiator
-<br/>
-R3D1: bedroom rad
-
-<br/>
-current<br/>
-{{ current_temps }}<br/>
-<br/>
-{{ states }}<br/>
-<br/>
-<br/>
-Targets:<br/>
-{{ targets }}<br/>

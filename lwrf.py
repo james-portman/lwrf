@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import redis
 from socket import *
 import threading
@@ -21,7 +21,7 @@ app = Flask(__name__)
 @app.route('/')
 def route_slash():
     states = all_states()
-    return render_template('slash', states=states, current_temps=current_temps(), targets=targets())
+    return render_template('slash', states=states, current_temps=current_temps(), targets=targets(), timers=timers())
 
 
 @app.route('/state')
@@ -33,7 +33,9 @@ def target():
     room = request.args.get('room')
     temp = request.args.get('temp')
     result = r.set('target_temp_'+room, temp)
-    return "tried?"
+    return redirect("/", code=302)
+    return "tried? <a href=/>BACK</a> "
+
 
 @app.route('/action')
 def send():
@@ -107,6 +109,18 @@ def targets():
         device = key.replace('target_temp_', '')
         output[device] = r.get(key)
     return output
+
+def timers():
+    output = []
+    keys = r.keys('timer_*')
+    for key in keys:
+        try:
+            data = json.loads(r.get(key))
+            output.append(data)
+        except:
+            pass
+    return output
+
 
 def udp_listen_thread():
     transaction_redis_timeout = 10
